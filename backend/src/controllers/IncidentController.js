@@ -3,11 +3,11 @@ const connection = require('../database/connection');
 
 
 module.exports = {
+    //Esse método é para listar os incidents que estão no banco
     async index(request, response) {
         const { page = 1 } = request.query;
 
         const [count] = await connection('incidents').count();
-
 
         const incidents = await connection('incidents')
             .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
@@ -25,7 +25,7 @@ module.exports = {
         return response.json(incidents);
     },
 
-
+    //Método para criar incidents no banco
     async create(request, response) {
         const { title, description, value } = request.body;
         const ong_id = request.headers.authorization;
@@ -40,6 +40,7 @@ module.exports = {
         return response.json({ id });
     },
 
+    //método para deletar incidents do banco
     async delete(request, response) {
         const { id } = request.params;
         const ong_id = request.headers.authorization;
